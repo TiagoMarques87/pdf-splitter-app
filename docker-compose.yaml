@@ -1,0 +1,13 @@
+services:
+  pdf-splitter:
+    image: pdf-splitter-app:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      # Mount input file dynamically from .env
+      - ${INPUT_FILE}:/app/input_file.pdf
+      # Mount output directory dynamically from .env
+      - ${OUTPUT_DIR}:/app/outputs
+    working_dir: /app
+    entrypoint: ["pdf-splitter-app"]

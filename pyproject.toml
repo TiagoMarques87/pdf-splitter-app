@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+
+[project]
+name = "pdf-splitter-app"
+version = "0.1.0"
+description = "A simple Python application to split PDF files per employee."
+authors = [{ name = "Tiago Marques" }]
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "pypdf>=3.0.0"
+]
+
+[project.optional-dependencies]
+dev = ["pytest"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[project.scripts]
+pdf-splitter-app = "app:cli"
