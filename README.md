@@ -1,6 +1,8 @@
 ![github](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white) ![python](https://img.shields.io/badge/Python-FFD43B?style=for-the-badge&logo=python&logoColor=blue) ![docker](https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white) ![docker compose](https://img.shields.io/badge/Docker%20Compose-2496ED?style=for-the-badge&logo=docker&logoColor=white) ![github actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white)
 
-# PDF Splitter Applciation
+[![Build and Push Docker Image](https://github.com/TiagoMarques87/pdf-splitter-app/actions/workflows/build.yaml/badge.svg?branch=master)](https://github.com/TiagoMarques87/pdf-splitter-app/actions/workflows/build.yaml)
+
+# PDF Splitter Application
 
 `PDF Splitter App` is a simple command-line tool that splits a multi-page PDF into individual single-page PDFs and names each file after an employee. It’s designed for teams or organizations that generate bulk reports, pay slips, or other employee-specific documents and need them separated automatically.
 
@@ -29,7 +31,7 @@ brew install gh
 1. Clone the repo:
 
 ```bash
-gh clone https://github.com/TiagoMarques87/pdf-splitter-app.git
+gh repo clone TiagoMarques87/pdf-splitter-app
 ```
 
 2. Change to the repo directory:
@@ -130,5 +132,24 @@ pytest tests/test_app.py::test_split_pdf_creates_expected_files -v
 To learn more on pytest read the official documentation. [Learn more](https://docs.pytest.org/en/stable/).
 
 ## 🔁 CI/CD (GitHub Actions)
+
+This project uses GitHub Actions to build and publish Docker images to [GitHub Container Registry (GHCR)](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry).
+
+On every `push` to **master**, a new image is built and pushed with the tag latest.
+
+You can also run the workflow `manually` and provide a custom tag (e.g. v1.0.0, dev).
+
+Image location:
+
+```bash
+ghcr.io/tiagomarques87/pdf-splitter-app:<TAG>
+```
+
+Example
+
+```bash
+ghcr.io/tiagomarques87/pdf-splitter-app:latest
+ghcr.io/tiagomarques87/pdf-splitter-app:v1.0.0
+```
 
 To learn more on GitHub Actions read the official documentation. [Learn more](https://docs.github.com/en/actions).
