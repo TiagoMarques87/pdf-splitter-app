@@ -1,0 +1,46 @@
+name: Build and Push Docker Image
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Docker image tag (e.g., v1.0.0, dev, latest)'
+        required: true
+        default: 'latest'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set Docker image name
+        id: vars
+        run: |
+          IMAGE_NAME=ghcr.io/$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
+          # If image_tag input exists use it, otherwise default to 'latest'
+          TAG=${{ github.event.inputs.image_tag || 'latest' }}
+          echo "IMAGE_NAME=$IMAGE_NAME" >> $GITHUB_ENV
+          echo "IMAGE_TAG=$TAG" >> $GITHUB_ENV
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
