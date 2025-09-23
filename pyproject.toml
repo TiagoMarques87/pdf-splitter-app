@@ -9,7 +9,8 @@ authors = [{ name = "Tiago Marques" }]
 readme = "README.md"
 requires-python = ">=3.9"
 dependencies = [
-    "pypdf>=3.0.0"
+    "pypdf>=3.0.0",
+    "ruff>=0.13.0"
 ]
 
 [project.optional-dependencies]
@@ -17,6 +18,23 @@ dev = ["pytest"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.ruff]
+line-length = 88
+indent-width = 2
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "E501", "F", "I"]
+fixable = ["ALL"]
+unfixable = []
+
+[tool.ruff.format]
+docstring-code-format = true
+docstring-code-line-length = 88
+quote-style = "single"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
 
 [project.scripts]
 pdf-splitter-app = "app:cli"

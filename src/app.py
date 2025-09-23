@@ -8,16 +8,13 @@ from datetime import datetime
 
 
 # ---------------- Logging Configuration ---------------- #
-logging.basicConfig(
-  level=logging.INFO,
-  format="%(levelname)s: %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 
 
 # ---------------- Utility Functions ---------------- #
 def get_current_date() -> str:
   """Return the current date in 'Mon-YYYY' format."""
-  return datetime.now().strftime("%b-%Y")
+  return datetime.now().strftime('%b-%Y')
 
 
 def get_employees_names(json_path: Path) -> list[str]:
@@ -35,18 +32,20 @@ def get_employees_names(json_path: Path) -> list[str]:
     ValueError: If the JSON structure is invalid.
   """
   if not json_path.exists():
-    raise FileNotFoundError(f"Employees file not found: {json_path}")
+    raise FileNotFoundError(f'Employees file not found: {json_path}')
 
-  with json_path.open("r", encoding="utf-8") as file:
+  with json_path.open('r', encoding='utf-8') as file:
     data = json.load(file)
 
-  if "employees" not in data or not isinstance(data["employees"], list):
+  if 'employees' not in data or not isinstance(data['employees'], list):
     raise ValueError("Invalid employees.json format. Expected {'employees': [...]}")
 
-  return sorted(data["employees"])
+  return sorted(data['employees'])
 
 
-def split_pdf(file_path: Path, output_folder: Path, current_date: str, employees: list[str]) -> None:
+def split_pdf(
+  file_path: Path, output_folder: Path, current_date: str, employees: list[str]
+) -> None:
   """
   Split a PDF file into multiple single-page PDF files.
 
@@ -59,24 +58,26 @@ def split_pdf(file_path: Path, output_folder: Path, current_date: str, employees
   output_folder.mkdir(parents=True, exist_ok=True)
 
   try:
-    with file_path.open("rb") as infile:
+    with file_path.open('rb') as infile:
       input_pdf = PdfReader(infile)
 
       if len(employees) != len(input_pdf.pages):
-        raise ValueError(f"Mismatch: {len(input_pdf.pages)} pages vs {len(employees)} employees")
+        raise ValueError(
+          f'Mismatch: {len(input_pdf.pages)} pages vs {len(employees)} employees'
+        )
 
       for i, page in enumerate(input_pdf.pages):
         output_pdf = PdfWriter()
         output_pdf.add_page(page)
 
-        output_file = output_folder / f"{employees[i]}_{current_date}.pdf"
-        with output_file.open("wb") as f:
+        output_file = output_folder / f'{employees[i]}_{current_date}.pdf'
+        with output_file.open('wb') as f:
           output_pdf.write(f)
 
-        logging.info(f"Generated: {output_file}")
+        logging.info(f'Generated: {output_file}')
 
   except Exception as e:
-    logging.error(f"❌ Error splitting PDF: {e}", exc_info=True)
+    logging.error(f'❌ Error splitting PDF: {e}', exc_info=True)
     raise
 
 
@@ -98,20 +99,20 @@ def main(input_file: str, output_folder: str, employees_file: str) -> int:
     employees = get_employees_names(Path(employees_file))
     number_employees = len(employees)
 
-    logging.info("Welcome to the PDF Splitter Application")
-    logging.info("========================================\n")
-    logging.info(f"📝 Input File      : {input_file}")
-    logging.info(f"📁 Output Folder   : {output_folder}")
-    logging.info(f"👥 Employees Count : {number_employees}\n")
-    logging.info(f"Generating {number_employees} single-page PDF files...\n")
+    logging.info('Welcome to the PDF Splitter Application')
+    logging.info('========================================\n')
+    logging.info(f'📝 Input File      : {input_file}')
+    logging.info(f'📁 Output Folder   : {output_folder}')
+    logging.info(f'👥 Employees Count : {number_employees}\n')
+    logging.info(f'Generating {number_employees} single-page PDF files...\n')
 
     split_pdf(Path(input_file), Path(output_folder), current_date, employees)
 
-    logging.info("✅ PDF files generated successfully!")
+    logging.info('✅ PDF files generated successfully!')
     return 0
 
   except Exception as e:
-    logging.error(f"❌ Application failed: {e}")
+    logging.error(f'❌ Application failed: {e}')
     return 1
 
 
@@ -122,26 +123,28 @@ def cli() -> None:
 
   Args:
     None
-  
+
   Returns:
     None
   """
   parser = argparse.ArgumentParser(
-    prog="pdf-splitter-app",
-    description="Split a PDF file into single-page files named after employees."
+    prog='pdf-splitter-app',
+    description='Split a PDF file into single-page files named after employees.',
   )
-  parser.add_argument("input_file", help="Path to the input PDF file.", type=str)
-  parser.add_argument("output_folder", help="Path to the folder for output files.", type=str)
+  parser.add_argument('input_file', help='Path to the input PDF file.', type=str)
   parser.add_argument(
-    "--employees-file",
-    default="assets/employees.json",
-    help="Path to the employees.json file (default: assets/employees.json).",
-    type=str
+    'output_folder', help='Path to the folder for output files.', type=str
+  )
+  parser.add_argument(
+    '--employees-file',
+    default='assets/employees.json',
+    help='Path to the employees.json file (default: assets/employees.json).',
+    type=str,
   )
   args = parser.parse_args()
 
   sys.exit(main(args.input_file, args.output_folder, args.employees_file))
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
   cli()

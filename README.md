@@ -131,6 +131,26 @@ pytest tests/test_app.py::test_split_pdf_creates_expected_files -v
 
 To learn more on pytest read the official documentation. [Learn more](https://docs.pytest.org/en/stable/).
 
+## 🧹 Linter (Ruff)
+
+1. Check for errors:
+
+```bash
+ruff check
+```
+
+**Note:** To automatically fix solvable errors use the *`--fix`* flag.
+
+2. Format the code:
+
+```bash
+ruff format
+```
+
+**Note:** To get a preview of what will be formated use the *`--diff`* flag.
+
+To learn more on Ruff read the official documentation. [Learn more](https://docs.astral.sh/ruff/).
+
 ## 🔁 CI/CD (GitHub Actions)
 
 This project uses GitHub Actions to build and publish Docker images to [GitHub Container Registry (GHCR)](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry).
